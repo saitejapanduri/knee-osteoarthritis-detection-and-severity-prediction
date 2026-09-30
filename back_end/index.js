@@ -1,33 +1,20 @@
-let express = require("express");
-let mongoose = require("mongoose")
-let hrroutes = require("./routes/hr_routes");
-let emproutes = require("./routes/emp_routes");
-let app = express();
+const express = require("express");
+const mongoose = require("mongoose");
+
+const patient_routes = require("./routes/patient_routes");
+const doctor_routes = require("./routes/doctor_routes");
+
+const app = express();
 
 app.use(express.json());
-app.use("/api/hr", hrroutes);
-app.use("/api/emp", emproutes);
 
-// connect with out mongodb hrmanagement database
-mongoose.connect("mongodb://localhost:27017/hrmanagement").then(
-    ()=>console.log("Database connected successfully")
-).catch((err)=>console.log(err));
+mongoose.connect("mongodb://127.0.0.1:27017/knee_oa")
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.log(err));
 
-// //local host: 3000/
-// app.get("/", (req, res)=>{
-//     res.send("Home page called");
-// })
+app.use("/patient", patient_routes);
+app.use("/doctor", doctor_routes);
 
-// //local host: 3000/aboutus
-// app.get("/aboutus", (req, res)=>{
-//     res.send("about page called");
-// })
-
-// app.post("/addStudent", (req, res)=>{
-//     res.send("add student page called");
-// })
-
-// run the server in the port 3000
-app.listen(3000, ()=>{
-    console.log("server running on port 3000");
-})
+app.listen(5000, () => {
+    console.log("Server running on port 5000");
+});
