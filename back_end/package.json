@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/saitejapanduri/knee-osteoarthritis-detection-and-severity-prediction#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.2"
   }
 }
