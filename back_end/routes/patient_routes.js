@@ -7,18 +7,14 @@ const users = require("../models/users");
 const query = require("../models/query");
 
 router.post("/register", async (req, res) => {
-    try {
-        let data = req.body;
-        data.password = await bcrypt.hash(data.password, 10);
-        data.role = "patient";
+    let data = req.body;
+    data.password = await bcrypt.hash(data.password, 10);
+    data.role = "patient";
 
-        let newuser = new users(data);
-        let result = await newuser.save();
+    let newuser = new users(data);
+    let result = await newuser.save();
 
-        res.send("Patient registered successfully");
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+    res.send(result);
 });
 
 router.post("/login", async (req, res) => {

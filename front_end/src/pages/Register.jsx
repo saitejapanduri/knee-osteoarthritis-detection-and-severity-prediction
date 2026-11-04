@@ -40,17 +40,21 @@ function Register() {
                 }
             );
 
-            const data = await response.json();
+            const data = await response.text();
+
+            console.log("Status:", response.status);
+            console.log("Response:", data);
 
             if (response.ok) {
                 alert("Registration successful");
                 navigate("/login");
             } else {
-                alert(data.message || "Registration failed");
+                alert(data || "Registration failed");
             }
 
         } catch (error) {
-            alert("Unable to connect to server");
+            console.log("Registration Error:", error);
+            alert(error.message);
         }
     };
 

@@ -153,21 +153,20 @@ router.delete("/knee/:id", async (req, res) => {
     }
 });
 
-router.post("/query/:id/reply", async (req, res) => {
-    try {
-        let result = await query.findByIdAndUpdate(
-            req.params.id,
-            {
-                reply: req.body.reply,
-                status: "Answered"
-            },
-            { new: true }
-        );
+router.post("/query/:patientId/reply", async (req, res) => {
+    let result = await query.findOneAndUpdate(
+        {
+            patientId: req.params.patientId,
+            status: "Pending"
+        },
+        {
+            reply: req.body.reply,
+            status: "Answered"
+        },
+        { new: true }
+    );
 
-        res.send(result);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+    res.send(result);
 });
 
 module.exports = router;

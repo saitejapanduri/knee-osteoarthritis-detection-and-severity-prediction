@@ -69,13 +69,20 @@ function Queries() {
                 }
             );
 
-            if (response.ok) {
+            const data = await response.json();
+
+            if (response.ok && data) {
                 alert("Reply submitted successfully");
                 setReply("");
+                setQueryId("");
                 loadQueries();
+            } else {
+                alert("Reply failed: " + JSON.stringify(data));
             }
-        } catch {
-            alert("Unable to connect to server");
+
+        } catch (error) {
+            console.log(error);
+            alert("Unable to submit reply");
         }
     };
 
@@ -92,6 +99,7 @@ function Queries() {
                             <p><strong>Patient ID:</strong> {item.patientId}</p>
                             <p><strong>Message:</strong> {item.message}</p>
                             <p><strong>Status:</strong> {item.status}</p>
+                            <p><strong>Doctor Reply:</strong> {item.reply || "Not answered yet"}</p>
                         </div>
                     ))}
 
@@ -117,8 +125,8 @@ function Queries() {
                 <form onSubmit={addQuery}>
                     <input
                         placeholder="Enter Patient ID"
-                        value={patientId}
-                        onChange={(e) => setPatientId(e.target.value)}
+                        value={queryId}
+                        onChange={(e) => setQueryId(e.target.value)}
                         required
                     />
 

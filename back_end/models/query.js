@@ -2,9 +2,12 @@ const mongoose = require("mongoose");
 
 const querySchema = new mongoose.Schema({
     patientId: String,
-    query: String,
+    message: String,
     reply: String,
-    status: String
+    status: {
+        type: String,
+        default: "Pending"
+    }
 });
 
 module.exports = mongoose.model("query", querySchema);
