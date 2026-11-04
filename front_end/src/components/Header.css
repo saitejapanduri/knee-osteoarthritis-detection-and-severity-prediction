@@ -1,0 +1,44 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 6%;
+    background-color: #123c50;
+    color: white;
+}
+
+.header-logo a {
+    text-decoration: none;
+    color: white;
+}
+
+.header-logo h2 {
+    font-size: 25px;
+}
+
+.header nav {
+    display: flex;
+    gap: 30px;
+}
+
+.header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.header nav a:hover {
+    color: #70d6c1;
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .header nav {
+        gap: 20px;
+    }
+}
