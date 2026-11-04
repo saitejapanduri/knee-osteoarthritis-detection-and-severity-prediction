@@ -1,3 +1,4 @@
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 
@@ -6,52 +7,120 @@ const users = require("../models/users");
 const query = require("../models/query");
 
 router.post("/register", async (req, res) => {
-    let data = req.body;
-    data.password = await bcrypt.hash(data.password, 10);
-    data.role = "patient";
+    try {
+        let data = req.body;
+        data.password = await bcrypt.hash(data.password, 10);
+        data.role = "patient";
 
-    let result = await users.create(data);
-    res.send(result);
-});
+        let newuser = new users(data);
+        let result = await newuser.save();
 
-router.post("/login", async (req, res) => {
-    let user = await users.findOne({ email: req.body.email });
-
-    if (user && await bcrypt.compare(req.body.password, user.password)) {
-        res.send("Patient login success");
-    } else {
-        res.send("Invalid email or password");
+        res.send("Patient registered successfully");
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
-router.put("/profile", async (req, res) => {
-    let result = await users.findOneAndUpdate(
-        { email: req.body.email },
-        req.body,
-        { new: true }
-    );
+router.post("/login", async (req, res) => {
+    try {
+        let user = await users.findOne({
+            email: req.body.email,
+            role: "patient"
+        });
 
-    res.send(result);
+        if (user && await bcrypt.compare(req.body.password, user.password)) {
+            res.send("Patient login success");
+        } else {
+            res.send("Invalid email or password");
+        }
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+router.get("/profile/:id", async (req, res) => {
+    try {
+        let result = await users.findOne({
+            _id: req.params.id,
+            role: "patient"
+        }).select("-password");
+
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+router.patch("/updateprofile/:id", async (req, res) => {
+    let data = req.body;
+
+    delete data.role;
+
+    if (data.password) {
+        data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    let updatedata = await users.findOneAndUpdate(
+        { _id: req.params.id, role: "patient" },
+        { $set: data },
+        { new: true }
+    ).select("-password");
+
+    res.send(updatedata);
+});
+
+router.delete("/profile/:id", async (req, res) => {
+    try {
+        let result = await users.findOneAndDelete({
+            _id: req.params.id,
+            role: "patient"
+        });
+
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 router.post("/query", async (req, res) => {
-    let result = await query.create(req.body);
-    res.send(result);
+    try {
+        let result = await query.create(req.body);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 router.get("/query/:id", async (req, res) => {
-    let result = await query.findById(req.params.id);
-    res.send(result);
+    try {
+        let result = await query.findById(req.params.id);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 router.put("/query/:id", async (req, res) => {
-    let result = await query.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-    );
+    try {
+        let result = await query.findByIdAndUpdate(
+            req.params.id,
+            { query: req.body.query },
+            { new: true }
+        );
 
-    res.send(result);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+router.delete("/query/:id", async (req, res) => {
+    try {
+        let result = await query.findByIdAndDelete(req.params.id);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 router.post("/predict", async (req, res) => {
@@ -63,11 +132,15 @@ router.post("/detect", async (req, res) => {
 });
 
 router.get("/history/:id", async (req, res) => {
-    let result = await query.find({
-        patientId: req.params.id
-    });
+    try {
+        let result = await query.find({
+            patientId: req.params.id
+        });
 
-    res.send(result);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 module.exports = router;
