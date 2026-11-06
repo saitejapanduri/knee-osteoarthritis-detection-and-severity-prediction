@@ -42,3 +42,17 @@
         gap: 20px;
     }
 }
+
+.header nav button {
+    background-color: #159b87;
+    color: white;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.header nav button:hover {
+    background-color: #70d6c1;
+}

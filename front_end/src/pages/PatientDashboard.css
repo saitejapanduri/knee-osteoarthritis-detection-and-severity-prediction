@@ -1,0 +1,99 @@
+
+.patient-dashboard {
+    min-height: 550px;
+    padding: 45px 6%;
+    background: #f3f7fa;
+}
+
+.patient-dashboard-welcome {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.patient-dashboard-welcome h1 {
+    font-size: 36px;
+    color: #123c50;
+    margin-bottom: 10px;
+}
+
+.patient-dashboard-welcome p {
+    color: #718096;
+    font-size: 16px;
+}
+
+.patient-dashboard-cards {
+    max-width: 1050px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.patient-dashboard-card {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(18, 60, 80, 0.07);
+    border: 1px solid #e6edf1;
+    transition: 0.3s;
+}
+
+.patient-dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(18, 60, 80, 0.12);
+}
+
+.patient-card-icon {
+    width: 55px;
+    height: 55px;
+    background: #d9f1ed;
+    color: #087f72;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 27px;
+    margin-bottom: 18px;
+}
+
+.patient-dashboard-card h3 {
+    color: #123c50;
+    font-size: 21px;
+    margin-bottom: 12px;
+}
+
+.patient-dashboard-card p {
+    color: #718096;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.patient-dashboard-card a {
+    display: inline-block;
+    background: #123c50;
+    color: white;
+    padding: 11px 20px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.patient-dashboard-card a:hover {
+    background: #159b87;
+}
+
+@media (max-width: 650px) {
+    .patient-dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .patient-dashboard-welcome h1 {
+        font-size: 28px;
+    }
+
+    .patient-dashboard {
+        padding: 30px 18px;
+    }
+}

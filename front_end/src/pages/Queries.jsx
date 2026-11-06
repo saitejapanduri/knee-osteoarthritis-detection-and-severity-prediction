@@ -25,7 +25,7 @@ function Queries() {
     };
 
     const addQuery = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
         try {
             const response = await fetch(
@@ -36,8 +36,8 @@ function Queries() {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        patientId,
-                        message,
+                        patientId: queryId,
+                        message: message,
                         status: "Pending"
                     })
                 }
@@ -46,10 +46,12 @@ function Queries() {
             if (response.ok) {
                 alert("Query submitted successfully");
                 setMessage("");
+                loadMyQueries();
             } else {
                 alert("Query submission failed");
             }
-        } catch {
+
+        } catch (error) {
             alert("Unable to connect to server");
         }
     };
@@ -86,6 +88,21 @@ function Queries() {
         }
     };
 
+    const loadMyQueries = async () => {
+        try {
+            const response = await fetch(
+                `http://localhost:5000/patient/history/${queryId}`
+            );
+
+            const data = await response.json();
+            setQueries(data);
+
+        } catch (error) {
+            console.log(error);
+            alert("Unable to load your queries");
+        }
+    };
+
     return (
         <div className="queries-page">
             <h2>{isDoctor ? "Patient Queries" : "My Queries"}</h2>
@@ -105,7 +122,7 @@ function Queries() {
 
                     <form onSubmit={replyQuery}>
                         <input
-                            placeholder="Enter Query ID"
+                            placeholder="Enter Patient ID"
                             value={queryId}
                             onChange={(e) => setQueryId(e.target.value)}
                             required
@@ -122,6 +139,8 @@ function Queries() {
                     </form>
                 </>
             ) : (
+                <>
+            <>
                 <form onSubmit={addQuery}>
                     <input
                         placeholder="Enter Patient ID"
@@ -139,6 +158,56 @@ function Queries() {
 
                     <button type="submit">Submit Query</button>
                 </form>
+
+                <button onClick={loadMyQueries}>
+                    View My Queries
+                </button>
+
+                <div className="my-queries">
+                    <h3>My Submitted Queries</h3>
+
+                    {queries.map((item) => (
+                        <div key={item._id} className="query-card">
+                            <p><strong>Message:</strong> {item.message}</p>
+                            <p><strong>Status:</strong> {item.status}</p>
+                            <p><strong>Doctor Reply:</strong> {item.reply || "Waiting for doctor reply"}</p>
+                        </div>
+                    ))}
+                </div>
+            </>
+
+            <button onClick={loadMyQueries}>
+                View My Queries
+            </button>
+
+            <div className="my-queries">
+                <h3>My Submitted Queries</h3>
+
+                {queries.filter(item => item.message).map((item) => (
+                    <div key={item._id} className="query-card">
+
+                        <p>
+                            <strong>Patient ID:</strong> {item.patientId}
+                        </p>
+
+                        <p>
+                            <strong>Message:</strong> {item.message}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong> {item.status}
+                        </p>
+
+                        <p>
+                            <strong>Doctor Reply:</strong>
+                            {item.reply || "Waiting for doctor reply"}
+                        </p>
+
+                    </div>
+                ))}
+            </div>
+            </>
+                
             )}
         </div>
     );

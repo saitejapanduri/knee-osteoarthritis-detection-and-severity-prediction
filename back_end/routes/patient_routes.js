@@ -18,33 +18,35 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    try {
-        let user = await users.findOne({
-            email: req.body.email,
-            role: "patient"
-        });
+    let user = await users.findOne({
+        email: req.body.email,
+        role: "patient"
+    });
 
-        if (user && await bcrypt.compare(req.body.password, user.password)) {
-            res.send("Patient login success");
-        } else {
-            res.send("Invalid email or password");
-        }
-    } catch (err) {
-        res.status(500).send(err.message);
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
+        res.json({
+            message: "Patient login success",
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
+    } else {
+        res.status(401).json({
+            message: "Invalid email or password"
+        });
     }
 });
 
 router.get("/profile/:id", async (req, res) => {
-    try {
-        let result = await users.findOne({
-            _id: req.params.id,
-            role: "patient"
-        }).select("-password");
+    let result = await users.findOne({
+        _id: req.params.id,
+        role: "patient"
+    }).select("-password");
 
-        res.send(result);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+    res.send(result);
 });
 
 router.patch("/updateprofile/:id", async (req, res) => {

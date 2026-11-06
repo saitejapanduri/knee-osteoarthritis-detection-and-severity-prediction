@@ -29,7 +29,15 @@ router.post("/login", async (req, res) => {
         });
 
         if (user && await bcrypt.compare(req.body.password, user.password)) {
-            res.send("Doctor login success");
+            res.json({
+                    message: "Doctor login success",
+                    user: {
+                        _id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role
+                    }
+                });
         } else {
             res.send("Invalid email or password");
         }
@@ -39,16 +47,12 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/profile/:id", async (req, res) => {
-    try {
-        let result = await users.findOne({
-            _id: req.params.id,
-            role: "doctor"
-        }).select("-password");
+    let result = await users.findOne({
+        _id: req.params.id,
+        role: "doctor"
+    }).select("-password");
 
-        res.send(result);
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+    res.send(result);
 });
 
 router.patch("/updateprofile/:id", async (req, res) => {

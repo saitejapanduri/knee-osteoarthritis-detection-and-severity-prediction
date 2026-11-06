@@ -13,6 +13,7 @@ import Queries from "./pages/Queries";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import DoctorKneeData from "./pages/DoctorKneeData";
 
 function App() {
     return (
@@ -35,6 +36,8 @@ function App() {
                 <Route path="/patient/queries" element={<Queries />} />
 
                 <Route path="/doctor/queries" element={<Queries />} />
+                <Route path="/doctor/knee" element={<DoctorKneeData />} />
+                
             </Routes>
 
             <Footer />
